@@ -1,6 +1,6 @@
 """
 creates arrays of simulated samples of dwell times from multi-step
-analyze a dwell distribution using the single step probability
+analyze a dwell distribution using the double step probability
 processes
 """
 
