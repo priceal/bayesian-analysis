@@ -1,28 +1,24 @@
-
-
-
 """
 creates arrays of simulated samples of dwell times from multi-step
-
 analyze a dwell distribution using the single step probability
-
 processes
 """
 
-tau = [50] 
+# model parameters
+tau = [10] 
+samples = 50
+maxT = np.Inf      # time window
 
-samples = 200
-maxT = np.Inf
+# bayesian analysis
+tau1Limits = [ 1, 20, 50]  
+trials = 200
 
-
-tau1Limits = [ 25, 75, 51]  
-trials = 100
+# plotting
+bins = 10
 
 #########################################################
-print("tau1 resolution = ", (tau1Limits[1]-tau1Limits[0])/(tau1Limits[2]-1))
-
-
-#########################################################
+print("tau1 resolution = {:.3f}"
+      .format((tau1Limits[1]-tau1Limits[0])/(tau1Limits[2]-1)))
 
 params = ba.createParams( tau1Limits )
 p0 = ba.uniformProb( params )
@@ -37,5 +33,6 @@ for n in range(trials):
     results.append( ba.maximum(params,p1)[0] )
 
 results = np.array(results)
-print(results.mean(),results.std())
-plt.hist( results, bins=20 )
+print("mean +/- std = {:.3f} + {:.3f}".format(results.mean(),results.std()))
+plt.hist( results, bins=bins )
+plt.xlim(tau1Limits[0],tau1Limits[1])
