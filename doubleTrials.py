@@ -5,14 +5,14 @@ processes
 """
 
 # model parameters
-tau = [20,50] 
+tau = [10,50] 
 samples = 100
 maxT = np.Inf      # time window
 
 # bayesian analysis
-tau1Limits = [ 1, 45, 20]  
-tau2Limits = [ 20, 90, 20]  
-trials = 100
+tau1Limits = [ 1, 40, 60]  
+tau2Limits = [ 20, 80, 75] 
+trials = 2
 
 #########################################################
 print("tau1 resolution = {:.3f}"
@@ -23,6 +23,7 @@ print("tau2 resolution = {:.3f}"
 params = ba.createParams( tau1Limits, tau2Limits )
 p0 = ba.uniformProb( params )
 
+startTime = timeit.default_timer()
 results = []
 for n in range(trials):
     
@@ -32,6 +33,9 @@ for n in range(trials):
     p1 = ba.multiUpdate( p0, total, params, ba.doubleExp, T=maxT )
     t1,t2 = ba.maximum(params,p1)
     results.append( [min(t1,t2), max(t1,t2)] )
+
+endTime = timeit.default_timer()
+print("loop took {:.3f} seconds to execute.".format(endTime-startTime))
 
 results = np.array(results)
 print("mean tau1 +/- std = {:.3f} + {:.3f}".format(results[:,0].mean(),results[:,0].std()))
